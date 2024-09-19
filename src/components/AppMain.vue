@@ -1,5 +1,6 @@
 <script>
 import { store } from '../store.js'
+import Card from './Card.vue'
 
 export default {
   data() {
@@ -20,6 +21,9 @@ export default {
       return !store.isSearching ? store.cardsList.length : this.cardsSelected.length;
     },
   },
+  components: {
+    Card,
+  }
 }
 </script>
 
@@ -31,21 +35,10 @@ export default {
         <span v-show="store.isSearching">Cards found <span class="counter-pillow">{{ cardsFoundCounter }}</span></span> 
       </div>
       <!-- Row di cols -->
-      <div class="row gx-4 mt-5">
+      <div class="row gx-3 mt-5">
         <!-- Cols -->
         <div class="col-2 card-col" :class="{ 'offset-1': index % 5 === 0 }" v-for="(card, index) in cardsSelected" :key="index">
-          <!-- Single card -->
-          <div class="card">
-            <div class="card-img">
-              <img class="w-100" :src="card.card_images[0].image_url" alt="">
-            </div>
-            <div class="card-title">
-              <span class="playing-card-type">{{ card.name }}</span>
-            </div>
-            <div class="card-archetype mx-2 my-1 ">
-              <span class="playing-card-archetype">{{ card.archetype }}</span>
-            </div>
-          </div>
+          <Card :card/>
         </div>
       </div>
     </div>
@@ -72,10 +65,6 @@ export default {
   }
 
   .card-col {
-    aspect-ratio: 1/2;
-  }
-
-  .card {
-    height: 90%;
+    aspect-ratio: 4/9;
   }
 </style>
