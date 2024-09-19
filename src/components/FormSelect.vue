@@ -23,6 +23,10 @@ export default {
           // handle error
           console.log(error);
         });
+    },
+    manageIsSearching() {
+      console.log('managing...')
+      if (store.selected !== 'start') store.isSearching = true;
     }
   },
   created () {
@@ -36,7 +40,7 @@ export default {
           if (!archetypesList.includes(archetype)) archetypesList.push(archetype);
         }
       return archetypesList.sort();
-    }
+    },
   } 
 }
 </script>
@@ -47,9 +51,9 @@ export default {
     <form action="" class="px-3 py-2">
       <label for="archetype">Filter archetype:</label>
       <select class="form-select form-select-sm mt-1" id="archetype" aria-label="archetype" v-model="store.selected"
-      @change="store.isSearching = true">
-        <option disabled selected>Open this select menu</option>
-        <!-- Option generate sulla base del dato in ingresso tramite computed -->
+      @change="store.isSearching = true" @blur="store.isSearching = false" @focus="manageIsSearching()">
+        <option value="" selected>Open this select menu</option>       
+        <!-- Options generate sulla base del dato in ingresso tramite computed -->
         <option v-for="archetype in cardsArchetypesList" :value="archetype">{{ archetype }}</option>
       </select>
     </form>
