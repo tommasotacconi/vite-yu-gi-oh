@@ -16,7 +16,7 @@ export default {
 </template>
 
 <style lang="scss" scoped>
-  // Credits: CHRISTOPHER KADE, link: https://christopherkade.com/posts/css-card-flip
+  //Card animation during loading. Credits: CHRISTOPHER KADE, link: https://christopherkade.com/posts/css-card-flip
   @keyframes cardFlip {
   0% {
     transform: rotateY(0deg);

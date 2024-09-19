@@ -6,7 +6,7 @@ export default {
   data() {
     return {
       store,
-      apiUrl: 'https://db.ygoprodeck.com/api/v7/cardinfo.php?num=1000&offset=60',
+      apiUrl: 'https://db.ygoprodeck.com/api/v7/cardinfo.php?num=60&offset=4300',
     }
   },
   methods: {
