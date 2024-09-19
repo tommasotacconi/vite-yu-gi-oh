@@ -30,7 +30,7 @@ export default {
 </script>
 
 <template>
-  <AppLoader v-if="!store.isLoaded"/>
+  <AppLoader id="loader" v-if="!store.isLoaded"/>
   <main v-else class="">
     <div class="card-container container-md">
       <!-- Contatori di card -->
@@ -50,6 +50,13 @@ export default {
 </template>
 
 <style lang="scss" scoped>
+  #loader {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    translate: -50% -50%;
+  }
+  
   main {
     margin: 30px 150px 10px;
     background-color: #ffae4b;

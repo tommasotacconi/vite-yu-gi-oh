@@ -47,20 +47,4 @@ export default {
 .card-back {
   transform: rotateY(180deg);
 }
-
-.card-wrapper {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    translate: -50% -50%;
-  }
-
-.card-wrapper:before {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #3f3f3fe9;
-}
 </style>

@@ -14,9 +14,9 @@ export default {
       axios.get(this.apiUrl)
         .then(response => {
           // handle success
-          console.dir(response.data.data);
+          const time = setTimeout(function() {console.dir(response.data.data);
           store.isLoaded = true;
-          store.cardsList = response.data.data;
+          store.cardsList = response.data.data;}, 3000);
         })
         .catch(function (error) {
           // handle error
