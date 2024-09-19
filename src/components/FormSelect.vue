@@ -7,7 +7,6 @@ export default {
     return {
       store,
       apiUrl: 'https://db.ygoprodeck.com/api/v7/cardinfo.php?num=1000&offset=60',
-      isLoaded: false,
     }
   },
   methods: {
@@ -16,7 +15,7 @@ export default {
         .then(response => {
           // handle success
           console.dir(response.data.data);
-          this.isLoaded = true;
+          store.isLoaded = true;
           store.cardsList = response.data.data;
         })
         .catch(function (error) {
@@ -46,12 +45,12 @@ export default {
 </script>
 
 <template>
-  <div class="container-md d-flex justify-content-around" v-if="this.isLoaded">
-    <!-- Select per ricercare il genere -->
+  <div class="container-md d-flex justify-content-around" v-if="store.isLoaded">
+    <!-- Select per ricercare l'archetipo -->
     <form action="" class="px-3 py-2">
-      <label for="archetype">Filter archetype:</label>
+      <label for="archetype">Filter card's archetype:</label>
       <select class="form-select form-select-sm mt-1" id="archetype" aria-label="archetype" v-model="store.selected"
-      @change="store.isSearching = true" @blur="store.isSearching = false" @focus="manageIsSearching()">
+        @change="store.isSearching = true" @blur="store.isSearching = false" @focus="manageIsSearching()">
         <option value="" selected>Open this select menu</option>       
         <!-- Options generate sulla base del dato in ingresso tramite computed -->
         <option v-for="archetype in cardsArchetypesList" :value="archetype">{{ archetype }}</option>

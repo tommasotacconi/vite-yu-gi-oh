@@ -1,6 +1,7 @@
 <script>
 import { store } from '../store.js'
 import Card from './Card.vue'
+import AppLoader from './AppLoader.vue'
 
 export default {
   data() {
@@ -23,17 +24,19 @@ export default {
   },
   components: {
     Card,
+    AppLoader
   }
 }
 </script>
 
 <template>
-  <main class="">
+  <AppLoader v-if="!store.isLoaded"/>
+  <main v-else class="">
     <div class="card-container container-md">
-      <!-- Contatore card -->
+      <!-- Contatori di card -->
       <div class="filter-counter-box row d-block p-4 bg-dark">
-        <span>Cards loaded {{ loadedCardsCounter }}</span>
-        <span v-show="store.isSearching">Cards found <span class="counter-pillow">{{ foundCardsCounter }}</span></span> 
+        <span>Loaded cards: {{ loadedCardsCounter }}</span>
+        <span v-show="store.isSearching">Found cards: <span class="counter-pillow">{{ foundCardsCounter }}</span></span> 
       </div>
       <!-- Row di cols -->
       <div class="row gx-3 mt-5">
