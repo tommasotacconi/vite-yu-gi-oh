@@ -1,6 +1,7 @@
 <script>
 import AppHeader from './components/AppHeader.vue';
 import AppMain from './components/AppMain.vue';
+import FormSelect from './components/FormSelect.vue'
 
 export default {
   data() {
@@ -9,6 +10,7 @@ export default {
     }
   },
   components: {
+    FormSelect,
     AppHeader,
     AppMain
   }
@@ -17,6 +19,7 @@ export default {
 
 <template>
   <AppHeader />
+  <FormSelect />
   <AppMain />
 </template>
 
