@@ -5,4 +5,5 @@ export const store = reactive({
   cardsList: [],
   isSearching: false,
   selected: 'start',
+  allArchetypesList: [],
 })

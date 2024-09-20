@@ -1,6 +1,6 @@
 <script>
 import AppHeader from './components/AppHeader.vue';
-import AppMain from './components/AppMain.vue';
+import AppMainContent from './components/AppMainContent.vue';
 import FormSelect from './components/FormSelect.vue'
 import { store } from './store.js'
 
@@ -14,7 +14,7 @@ export default {
   components: {
     FormSelect,
     AppHeader,
-    AppMain
+    AppMainContent
   }
 }
 </script>
@@ -22,7 +22,7 @@ export default {
 <template>
   <AppHeader :class="{ 'app-header': !store.isLoaded }"/>
   <FormSelect />
-  <AppMain />
+  <AppMainContent />
 </template>
 
 <style lang="scss">
