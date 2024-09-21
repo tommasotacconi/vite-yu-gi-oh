@@ -15,7 +15,7 @@ export default {
     // Lista di cards filtrate sulla base della select
     cardsSelected: function () {
       if (!store.isSearching) return store.cardsList;
-      return store.cardsList.filter(card => card.archetype === store.selected)
+      return store.filterCardsForArchetype(store.selected);
     },
     // Un contatore di cards caricate
     loadedCardsCounter: () => store.cardsList.length,
@@ -25,7 +25,7 @@ export default {
   components: {
     Card,
     AppLoader
-  }
+  },
 }
 </script>
 

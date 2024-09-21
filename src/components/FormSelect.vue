@@ -40,6 +40,9 @@ export default {
     manageStoreDataIsSearching() {
       console.log('managing...')
       if (store.selected !== 'start') store.isSearching = true;
+    },
+    writeCorrespondances(archetype, objCorrespondances) {
+      if (objCorrespondances[archetype]) return `(correspondances ${objCorrespondances[archetype]})`;
     }
   },
   created () {
@@ -47,15 +50,26 @@ export default {
     this.getAllCardsArchetypes();
   },
   computed: {
-    /* cardsArchetypesList() {
+    cardsArchetypesList() {
       const archetypesList = [];
       for (let i = 0; i < store.cardsList.length; i++) {
           const archetype = store.cardsList[i].archetype;
           if (!archetypesList.includes(archetype)) archetypesList.push(archetype);
         }
       return archetypesList.sort();
-    }, */
-  } 
+    },
+    loadedArchetypesCorrespondances() {
+      let loadedArchetypesCorrespondancesCounter = {};
+      for (let i = 0; i < this.cardsArchetypesList.length; i++) {
+        const countedArchetype = this.cardsArchetypesList[i];
+        const cardsOfSameArchetype = store.filterCardsForArchetype(countedArchetype);
+        const archetypeCounter = {[countedArchetype]: cardsOfSameArchetype.length};
+        loadedArchetypesCorrespondancesCounter = {...loadedArchetypesCorrespondancesCounter, ...archetypeCounter};
+      }
+      console.dir(loadedArchetypesCorrespondancesCounter);
+      return loadedArchetypesCorrespondancesCounter;
+    }
+  },
 }
 </script>
 
@@ -66,9 +80,12 @@ export default {
       <label for="archetype">Filter card's archetype:</label>
       <select class="form-select form-select-sm mt-1" id="archetype" aria-label="archetype" v-model="store.selected"
         @change="store.isSearching = true" @blur="store.isSearching = false" @focus="manageStoreDataIsSearching()">
-        <option value="" selected>Open this select menu</option>       
+        <option value="start" disabled selected>Open this select menu</option>       
         <!-- Options generate sulla base del dato in ingresso tramite computed -->
-        <option v-for="archetype in store.allArchetypesList" :value="archetype.archetype_name">{{ archetype.archetype_name }}</option>
+        <option v-for="archetype in store.allArchetypesList" :value="archetype.archetype_name">
+          {{ archetype.archetype_name }}
+          {{ writeCorrespondances(archetype.archetype_name, loadedArchetypesCorrespondances) }}
+        </option>
       </select>
     </form>
   </div>
@@ -81,6 +98,6 @@ export default {
 
   select {
     width: 250px;
-    field-sizing: fixed                             
+    field-sizing: fixed;
   }
 </style>

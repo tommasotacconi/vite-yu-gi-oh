@@ -6,4 +6,7 @@ export const store = reactive({
   isSearching: false,
   selected: 'start',
   allArchetypesList: [],
+  filterCardsForArchetype(archetype) {
+    return store.cardsList.filter(card => card.archetype === archetype);
+  },
 })
