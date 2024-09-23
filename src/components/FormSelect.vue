@@ -6,18 +6,18 @@ export default {
   data() {
     return {
       store,
-      apiUrl: 'https://db.ygoprodeck.com/api/v7/cardinfo.php?num=60&offset=4300',
-      apiUrlAllArchetypes: 'https://db.ygoprodeck.com/api/v7/archetypes.php',
     }
   },
   methods: {
-    getCardsList () {
-      axios.get(this.apiUrl)
+    getCardsList() {
+      axios.get(store.getApiUrl(undefined, undefined, 'num=50&offset=4000'))
         .then(response => {
           // handle success
-          const time = setTimeout(function() {console.dir(response.data.data);
-          store.isLoaded = true;
-          store.cardsList = response.data.data;}, 3000);
+          const time = setTimeout(function () {
+            console.dir(response.data.data);
+            store.isLoaded = true;
+            store.cardsList = response.data.data;
+          }, 3000);
         })
         .catch(function (error) {
           // handle error
@@ -25,21 +25,34 @@ export default {
         });
     },
     getAllCardsArchetypes() {
-      axios.get(this.apiUrlAllArchetypes)
+      axios.get(store.getApiUrl(undefined, 'archetypes.php', null))
         .then(response => {
           // handle success
-          const time = setTimeout(function() {console.dir(response.data);
-          store.isLoaded = true;
-          store.allArchetypesList = response.data;}, 3000);
+          console.dir(response.data);
+          store.allArchetypesList = response.data;
         })
         .catch(function (error) {
           // handle error
           console.log(error);
         })
-      },    
+    },
+    apiSearchArchetype(searchedArchetype) {
+      axios.get(store.getApiUrl(undefined, undefined, `archetype=${searchedArchetype}`))
+        .then(response => {
+          // handle success
+          console.dir(response.data.data);
+          store.isSearching = true;
+          store.allApiCardsSelectedByArchetype = response.data.data;
+          })
+        .catch(function (error) {
+          // handle error
+          console.log(error);
+        })
+    },
+    updateShownCards() {this.apiSearchArchetype(store.selectedArchetype)},    
     manageStoreDataIsSearching() {
       console.log('managing...')
-      if (store.selected !== 'start') store.isSearching = true;
+      if (store.selectedArchetype !== 'start') store.isSearching = true;
     },
     writeCorrespondances(archetype, objCorrespondances) {
       if (objCorrespondances[archetype]) return `(correspondances ${objCorrespondances[archetype]})`;
@@ -50,6 +63,7 @@ export default {
     this.getAllCardsArchetypes();
   },
   computed: {
+    // Generate the archetypes list with the only archetypes loaded in page
     cardsArchetypesList() {
       const archetypesList = [];
       for (let i = 0; i < store.cardsList.length; i++) {
@@ -59,6 +73,8 @@ export default {
       return archetypesList.sort();
     },
     loadedArchetypesCorrespondances() {
+      // Generate an object with properties corresponding to the archetypes laoded
+      // and related value equal to number of correspondances found
       let loadedArchetypesCorrespondancesCounter = {};
       for (let i = 0; i < this.cardsArchetypesList.length; i++) {
         const countedArchetype = this.cardsArchetypesList[i];
@@ -76,17 +92,26 @@ export default {
 <template>
   <div class="container-md d-flex justify-content-around" v-if="store.isLoaded">
     <!-- Select per ricercare l'archetipo -->
-    <form action="" class="px-3 py-2">
-      <label for="archetype">Filter card's archetype:</label>
-      <select class="form-select form-select-sm mt-1" id="archetype" aria-label="archetype" v-model="store.selected"
-        @change="store.isSearching = true" @blur="store.isSearching = false" @focus="manageStoreDataIsSearching()">
-        <option value="start" disabled selected>Open this select menu</option>       
-        <!-- Options generate sulla base del dato in ingresso tramite computed -->
-        <option v-for="archetype in store.allArchetypesList" :value="archetype.archetype_name">
-          {{ archetype.archetype_name }}
-          {{ writeCorrespondances(archetype.archetype_name, loadedArchetypesCorrespondances) }}
-        </option>
-      </select>
+    <form action="" class="px-3 py-2 d-flex align-items-end">
+      <div class="wrapper me-3">
+        <label for="archetype">Filter card's archetype:</label>
+        <select class="form-select form-select-sm mt-1" id="archetype" aria-label="archetype" v-model="store.selectedArchetype"
+          @change="updateShownCards()" @blur="store.isSearching = false" @focus="manageStoreDataIsSearching()">
+          <option value="start" disabled selected>Open this select menu</option>       
+          <!-- Options generate sulla base del dato in ingresso tramite computed -->
+          <option v-for="archetype in store.allArchetypesList" :value="archetype.archetype_name">
+            {{ archetype.archetype_name }}
+            {{ writeCorrespondances(archetype.archetype_name, loadedArchetypesCorrespondances) }}
+          </option>
+        </select>
+      </div>
+      <div class="wrapper">
+        <select name="switch" id="archetype-switch" aria-label="archetype-switch" class="form-select form-select-sm mt-1" v-model="store.archetypeSwitch">
+          <option value="show start" disabled selected>Decide what to see</option>
+          <option value="show all">Show all archetype</option>
+          <option value="Only in page">Only loaded archetype</option>
+        </select>
+      </div>
     </form>
   </div>
 </template>
@@ -99,5 +124,9 @@ export default {
   select {
     width: 250px;
     field-sizing: fixed;
+  }
+
+  select#archetype-switch {
+    width: 180px;
   }
 </style>

@@ -7,20 +7,23 @@ export default {
   data() {
     return {
       store,
+      
     }
   },
   methods: {
   },
   computed: {
     // Lista di cards filtrate sulla base della select
-    cardsSelected: function () {
+    cardsShown: function () {
       if (!store.isSearching) return store.cardsList;
-      return store.filterCardsForArchetype(store.selected);
+      if (store.archetypeSwitch === 'Only in page') return store.filterCardsForArchetype(store.selectedArchetype);
+      else return store.allApiCardsSelectedByArchetype;
+      
     },
     // Un contatore di cards caricate
     loadedCardsCounter: () => store.cardsList.length,
     // Un contatore di cards filtrate
-    foundCardsCounter()  {return this.cardsSelected.length},
+    foundCardsCounter()  {return this.cardsShown.length},
   },
   components: {
     Card,
@@ -41,8 +44,8 @@ export default {
       <!-- Row di cols -->
       <div class="row gx-3 mt-5">
         <!-- Cols -->
-        <div class="col-2 card-col" :class="{ 'offset-1': index % 5 === 0 }" v-for="(card, index) in cardsSelected" :key="index">
-          <Card :card/>
+        <div class="col-2 card-col" :class="{ 'offset-1': index % 5 === 0 }" v-for="(card, index) in cardsShown" :key="index">
+          <Card :card />
         </div>
       </div>
     </div>
